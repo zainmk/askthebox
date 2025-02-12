@@ -1,5 +1,18 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+#!/bin/bash
 
-# Run Prettier on all files before pushing
+echo "Running Prettier... ✨"
+
+# Run Prettier command to format all files
 npx prettier --write .
+
+echo "Amending latest commit with Prettier changes..."
+
+# Add all files to the staging area
+git add .
+
+# Amend the previous commit with the changes
+git commit --amend --no-edit
+
+echo "Prettier run complete ✅"
+
+exit 0
