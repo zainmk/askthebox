@@ -8,22 +8,26 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { UserContext } from '../helpers/userContext';
 import Cards from './Cards.js';
 
+function CardList({ isLoading }) {
+  const { mediaList, setMediaList } = useContext(UserContext);
 
-function CardList({ isLoading }){
-
-    const { mediaList, setMediaList } = useContext(UserContext)
-
-    return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center" }}>
-        <Cards type={<SearchCard />} />
-        {isLoading ? <CircularProgress /> : mediaList?.map((media) => (
-            <Cards 
-                key={media.imdbID} 
-                onDelete={ ()=> setMediaList(mediaList?.filter((entry) => entry.imdbID !== media.imdbID)) } 
-                type={<MediaCard media={media} />}
-            />
-        ))}
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Cards type={<SearchCard />} />
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        mediaList?.map((media) => (
+          <Cards
+            key={media.imdbID}
+            onDelete={() =>
+              setMediaList(mediaList?.filter((entry) => entry.imdbID !== media.imdbID))
+            }
+            type={<MediaCard media={media} />}
+          />
+        ))
+      )}
     </Box>
-    )
+  );
 }
 export default CardList;
