@@ -5,31 +5,30 @@ import TitleBar from '../components/TitleBar.js';
 import CardList from '../components/CardList.js';
 import Box from '@mui/material/Box';
 
-import { UserContext } from '../helpers/userContext';
+import { MediaContext } from '../helpers/MediaContext';
 
 import { getMediaList, updateMediaList } from '../helpers/database.js'
 
 function MainPage() {
 
-  const { user, mediaList, setMediaList } = useContext(UserContext);
+  const { mediaList, setMediaList } = useContext(MediaContext);
   const [ isLoading, setIsLoading ] = useState(false)
 
   useEffect(()=> {
 
     setIsLoading(true)
-    
-    if(user){ // should only be ON this page when 'user' has a value
-      getMediaList(user).then(res => {
-        setMediaList(res ? res : [])
-        setIsLoading(false)
-      })
 
-    }
-  }, [user, setMediaList])
+    getMediaList().then(res => {
+      setMediaList(res ? res : [])
+      setIsLoading(false)
+    })
 
-  useEffect(()=>{
-    updateMediaList(user, mediaList)
-  }, [user, mediaList])
+  }, [setMediaList])
+
+  useEffect(()=> {
+    updateMediaList(mediaList)
+  }, [mediaList])
+
 
   return (
       <Box sx={{ display: 'flex', flexDirection: 'column', height:"100vh" }}>

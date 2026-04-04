@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom"
 
 import { getUser } from "../helpers/database.js";
-import { UserContext } from '../helpers/userContext';
+import { MediaContext } from '../helpers/MediaContext.js';
 
 function LoginPage() {
 
@@ -18,7 +18,7 @@ function LoginPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const { setUser } = useContext(UserContext);
+    const { setUser } = useContext(MediaContext);
 
     const onLogin = () => {
         if (username === "" || password === "") {
