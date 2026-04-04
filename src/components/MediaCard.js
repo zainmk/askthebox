@@ -56,7 +56,7 @@ function MediaCard({ media }){
                 </Typography>
                 <Divider/>
                 <Box sx={{ marginTop: "10px" }}>
-                    {/* <LibraryTools status={status} setStatus={setStatus} /> */}
+                    <LibraryTools status={status} setStatus={setStatus} />
                 </Box>
             </Box>
         </Box>
