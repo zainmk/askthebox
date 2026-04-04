@@ -5,13 +5,13 @@ import SearchCard from './SearchCard.js';
 import MediaCard from './MediaCard.js';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { UserContext } from '../helpers/userContext';
+import { MediaContext } from '../helpers/MediaContext.js';
 import Cards from './Cards.js';
 
 
 function CardList({ isLoading }){
 
-    const { mediaList, setMediaList } = useContext(UserContext)
+    const { mediaList, setMediaList } = useContext(MediaContext)
 
     return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center" }}>

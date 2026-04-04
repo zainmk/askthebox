@@ -1,10 +1,10 @@
 import { Outlet, Navigate } from 'react-router-dom'
-import { UserContext } from './userContext';
+import { MediaContext } from './MediaContext';
 import { useContext, useEffect } from 'react';
 
 export default function ProtectedRoutes(){
 
-    const { user } = useContext(UserContext)
+    const { user } = useContext(MediaContext)
 
     useEffect(() => {
         if(!!user) localStorage.setItem('user', user)

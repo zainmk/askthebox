@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
 
-import { UserContext } from '../helpers/userContext';
+import { MediaContext } from '../helpers/MediaContext';
 
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
@@ -13,7 +13,7 @@ import LibraryTools from './LibraryTools';
 
 function MediaCard({ media }){
 
-    const { setMediaList } = useContext(UserContext) // TODO: Move this to parent, and use setMedia
+    const { setMediaList } = useContext(MediaContext) // TODO: Move this to parent, and use setMedia
 
     const [image, setImage] = useState()
     const [status, setStatus] = useState(media.status)
@@ -56,7 +56,7 @@ function MediaCard({ media }){
                 </Typography>
                 <Divider/>
                 <Box sx={{ marginTop: "10px" }}>
-                    <LibraryTools status={status} setStatus={setStatus} />
+                    {/* <LibraryTools status={status} setStatus={setStatus} /> */}
                 </Box>
             </Box>
         </Box>

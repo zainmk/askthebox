@@ -5,20 +5,20 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import RecommendIcon from '@mui/icons-material/Recommend';
 import ListIcon from '@mui/icons-material/List';
 
-import { UserContext } from '../helpers/userContext';
+import { MediaContext } from '../helpers/MediaContext';
 
 export default function ProfileDrawer() {
 
-  const { user } = useContext(UserContext);
+  // const { user } = useContext(MediaContext);
   
   const [open, setOpen] = useState(false);
-  const toggleDrawer = ()=> setOpen(!open)
+  const toggleDrawer = () => setOpen(!open)
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer}>
       <List>
         <div style={{ textAlign: "center"}}>
-          <p> {user} </p>
+          {/* <p> {user} </p> */}
           <img src={'/thumbs.png'} alt='user avatar' width={'125px'} />
           <p> Level 1 </p>
         </div>
@@ -45,7 +45,7 @@ export default function ProfileDrawer() {
     <div>
       <Button onClick={toggleDrawer}>
         <Stack direction="row" spacing={2}>
-          <Avatar sx={{ color: 'white' }}>{user[0]}</Avatar>
+          {/* <Avatar sx={{ color: 'white' }}>{user[0]}</Avatar> */}
         </Stack>
       </Button>
       <Drawer open={open} onClose={toggleDrawer}>
