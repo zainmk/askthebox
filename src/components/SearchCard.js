@@ -68,18 +68,40 @@ function SearchCard(){
         setSearchData([]) 
     }
 
-    useEffect(()=>{
-        if(searchText.length > 3){
-            fetch(`https://www.omdbapi.com/?apikey=522792c1&s=${searchText}`)
-                .then(res => res.json())
-                .then(res => res.Response !== 'False' ? res.Search : [])
-                .then(res => setSearchData(res))
-                .catch(err => console.log(err))
-        }
-        else{
-            setSearchData([])
-        }
-    }, [searchText])
+    // useEffect(()=>{
+    //     if(searchText.length > 3){
+    //         fetch(`https://www.omdbapi.com/?apikey=522792c1&s=${searchText}`) // IMDB API w/ API KEY
+    //             .then(res => res.json())
+    //             .then(res => res.Response !== 'False' ? res.Search : [])
+    //             .then(res => setSearchData(res))
+    //             .catch(err => console.log(err))
+    //     }
+    //     else{
+    //         setSearchData([])
+    //     }
+    // }, [searchText])
+
+    useEffect(() => {
+        const fetchMovies = async () => {
+            if (searchText.length > 1) {
+                try {
+                    const res = await fetch(`https://www.omdbapi.com/?apikey=522792c1&s=${searchText}`);
+                    const res_byID = await fetch(`https://www.omdbapi.com/?apikey=522792c1&i=${searchText}`)
+                    const data = await res.json();
+                    const data_byID = await res_byID.json();
+                    const data_byID_results = data_byID.Response !== 'False' ? [data_byID] : [];
+                    const results = data.Response !== 'False' ? data.Search : data_byID_results;
+                    setSearchData(results);
+                } catch (err) {
+                    console.log(err);
+                }
+            } else {
+                setSearchData([]);
+            }
+        };
+        fetchMovies();
+    }, [searchText]);
+
 
     return (
         <>

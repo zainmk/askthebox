@@ -31,7 +31,7 @@ export default function TitleBar() {
         <Toolbar>
         <ProfileDrawer/>
           <Typography component="div" sx={{ flexGrow: 1, textAlign: "center"}}>
-              ask | BOX
+              a s k | BOX
           </Typography>
             {/* <Button color="inherit" onClick={ onLogout }> Logout </Button> */}
         </Toolbar>
