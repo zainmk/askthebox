@@ -12,13 +12,13 @@ function LibraryTools({ status, setStatus }){
     return (
         <>
             <ToggleButtonGroup size="small" value={status} exclusive onChange={(event, newStatus) => setStatus(newStatus === status ? '' : newStatus)}>
-                <ToggleButton value={"dislike"} sx={{ transform: "rotate(180deg)" }}>
+                <ToggleButton value={"dislike"} sx={{ transform: "rotate(180deg)", "&.Mui-selected": { borderTop: "5px solid red"} }}>
                     <RecommendIcon />
                 </ToggleButton>
-                <ToggleButton value={"like"}>
+                <ToggleButton value={"like"} sx={{"&.Mui-selected": { borderBottom: "5px solid green"} }}>
                     <RecommendIcon />
                 </ToggleButton>
-                <ToggleButton value={"watch"}>
+                <ToggleButton value={"watch"} sx={{"&.Mui-selected": { borderBottom: "5px solid blue"} }}>
                     <PreviewIcon />
                 </ToggleButton>
             </ToggleButtonGroup>

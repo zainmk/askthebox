@@ -68,18 +68,6 @@ function SearchCard(){
         setSearchData([]) 
     }
 
-    // useEffect(()=>{
-    //     if(searchText.length > 3){
-    //         fetch(`https://www.omdbapi.com/?apikey=522792c1&s=${searchText}`) // IMDB API w/ API KEY
-    //             .then(res => res.json())
-    //             .then(res => res.Response !== 'False' ? res.Search : [])
-    //             .then(res => setSearchData(res))
-    //             .catch(err => console.log(err))
-    //     }
-    //     else{
-    //         setSearchData([])
-    //     }
-    // }, [searchText])
 
     useEffect(() => {
         const fetchMovies = async () => {

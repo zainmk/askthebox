@@ -32,7 +32,7 @@ function MainPage() {
 
   return (
       <Box sx={{ display: 'flex', flexDirection: 'column', height:"100vh" }}>
-        <TitleBar  />
+        <TitleBar />
         <Box sx={{ flex: 1, backgroundImage:"url('rollinghills.gif')" }}>
           <CardList isLoading={isLoading} />
         </Box>
