@@ -10,29 +10,18 @@ import ProfileDrawer from './ProfileDrawer';
 import { useNavigate } from "react-router-dom"
 import { useContext } from 'react';
 
-import { MediaContext } from '../helpers/MediaContext.js'
 
 export default function TitleBar() {
-
-  // TODO: ADD A MODAL TO ALLOW 'PASSWORD' ACCESS TO 'UNLOCK' APPROVALS
-
-  const navigate = useNavigate();
-  const { setUser } = useContext(MediaContext)
-
-  // const onLogout = ()=> {
-  //   setUser(null)
-  //   localStorage.removeItem('user')
-  //   navigate('/login')
-  // }
 
   return (
     <>
       <AppBar position="static" >
         <Toolbar>
-        <ProfileDrawer/>
-          <Typography component="div" sx={{ flexGrow: 1, textAlign: "center"}}>
-              a s k | BOX
-          </Typography>
+        <ProfileDrawer/> 
+         <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <img src="movie.png" alt="movie text" style={{ height: '48px', marginBottom: '4px' }} />
+            {/* <Typography component="div"> a s k | BOX </Typography> */}
+          </div>
             {/* <Button color="inherit" onClick={ onLogout }> Logout </Button> */}
         </Toolbar>
       </AppBar>

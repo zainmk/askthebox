@@ -5,6 +5,7 @@ import TitleBar from '../components/TitleBar.js';
 import CardList from '../components/CardList.js';
 import Box from '@mui/material/Box';
 
+
 import { MediaContext } from '../helpers/MediaContext';
 
 import { getMediaList, updateMediaList } from '../helpers/database.js'

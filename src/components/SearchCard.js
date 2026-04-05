@@ -54,8 +54,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 
-
 function SearchCard(){
+
+    const DEBOUNCE_DELAY = 300; // ms
 
     const { setMediaList } = useContext(MediaContext);
 
@@ -63,31 +64,33 @@ function SearchCard(){
     const [searchData, setSearchData] = useState([]);
 
     const onAddSearchEntry = (entry) => {
-        // check for duplicates
         setMediaList((mediaList) => mediaList?.filter(media => media.imdbID === entry.imdbID).length > 0 ? mediaList : [entry, ...mediaList])
         setSearchData([]) 
     }
 
-
     useEffect(() => {
-        const fetchMovies = async () => {
-            if (searchText.length > 1) {
-                try {
-                    const res = await fetch(`https://www.omdbapi.com/?apikey=522792c1&s=${searchText}`);
-                    const res_byID = await fetch(`https://www.omdbapi.com/?apikey=522792c1&i=${searchText}`)
-                    const data = await res.json();
-                    const data_byID = await res_byID.json();
-                    const data_byID_results = data_byID.Response !== 'False' ? [data_byID] : [];
-                    const results = data.Response !== 'False' ? data.Search : data_byID_results;
-                    setSearchData(results);
-                } catch (err) {
-                    console.log(err);
+        const delayDebounce = setTimeout(() => {
+            const fetchMovies = async () => {
+                if (searchText.length > 1) {
+                    try {
+                        const res = await fetch(`https://www.omdbapi.com/?apikey=ee46ee2e&s=${searchText}`); // 522792c1 (another token)
+                        const res_byID = await fetch(`https://www.omdbapi.com/?apikey=ee46ee2e&i=${searchText}`)
+                        const data = await res.json();
+                        const data_byID = await res_byID?.json().catch(() => []);
+                        const results = data.Response !== 'False' ? data.Search : data_byID;
+                        setSearchData(results);
+                    } catch (err) {
+                        console.log(err);
+                    }
+                } else {
+                    setSearchData([]);
                 }
-            } else {
-                setSearchData([]);
-            }
-        };
-        fetchMovies();
+            };
+            fetchMovies();
+        }, DEBOUNCE_DELAY);
+
+        return () => clearTimeout(delayDebounce);
+
     }, [searchText]);
 
 

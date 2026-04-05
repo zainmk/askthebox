@@ -16,10 +16,21 @@ function CardList({ isLoading }){
     return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center" }}>
         <Cards type={<SearchCard />} />
-        {isLoading ? <CircularProgress /> : mediaList?.map((media) => (
+        <p style={{ color:'white' }}> R E Q U E S T E D </p>
+        <hr style = {{ width: '100%', borderColor: 'white' }} />
+         {isLoading ? <CircularProgress /> : mediaList?.filter(entry => entry.status !== 'like')?.map((media) => (
             <Cards 
                 key={media.imdbID} 
                 onDelete={ ()=> setMediaList(mediaList?.filter((entry) => entry.imdbID !== media.imdbID)) } 
+                type={<MediaCard media={media} />}
+            />
+        ))}
+        <p style={{ color:'white' }}> A D D E D </p>
+        <hr style = {{ width: '100%', borderColor: 'white' }} />
+        {isLoading ? <CircularProgress /> : mediaList?.filter(entry => entry.status === 'like')?.map((media) => (
+            <Cards 
+                key={media.imdbID} 
+                onDelete={()=> setMediaList(mediaList?.filter((entry) => entry.imdbID !== media.imdbID))} 
                 type={<MediaCard media={media} />}
             />
         ))}
