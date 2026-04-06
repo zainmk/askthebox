@@ -20,9 +20,7 @@ export default function TitleBar() {
         <ProfileDrawer/> 
          <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <img src="movie.png" alt="movie text" style={{ height: '48px', marginBottom: '4px' }} />
-            {/* <Typography component="div"> a s k | BOX </Typography> */}
           </div>
-            {/* <Button color="inherit" onClick={ onLogout }> Logout </Button> */}
         </Toolbar>
       </AppBar>
     </>
