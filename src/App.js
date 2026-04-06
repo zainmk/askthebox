@@ -9,26 +9,29 @@ import ProtectedRoutes from "./helpers/ProtectedRoutes.js";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { MediaContext } from './helpers/MediaContext.js';
+import { AdminContext } from './helpers/AdminContext.js';
 import { useState } from 'react';
 
 export default function App() {
 
-  // const [user, setUser] = useState(localStorage.getItem('user')); // TODO: create a custom hook for local storage values
+  const [admin, setAdmin] = useState(false);
   const [mediaList, setMediaList] = useState()
 
   return (
+    <AdminContext.Provider value={{ admin, setAdmin }}>
     <MediaContext.Provider value={{ mediaList, setMediaList }}>
-      <ThemeProvider theme={createTheme({ palette: { mode: 'dark' }})}>
-        <BrowserRouter>
-          <Routes>
-            {/* <Route element={<ProtectedRoutes />}> */}
-            <Route path="/" element={<MainPage />} />
-            {/* </Route> */}
-            {/* <Route path="register" element={<RegisterPage />} />
-            <Route path="login" element={<LoginPage />} /> */}
-          </Routes>
-        </BrowserRouter>
-      </ThemeProvider>
+    <ThemeProvider theme={createTheme({ palette: { mode: 'dark' }})}>
+      <BrowserRouter>
+        <Routes>
+          {/* <Route element={<ProtectedRoutes />}> */}
+          <Route path="/" element={<MainPage />} />
+          {/* </Route> */}
+          {/* <Route path="register" element={<RegisterPage />} />
+          <Route path="login" element={<LoginPage />} /> */}
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
     </MediaContext.Provider>
+    </AdminContext.Provider>
   )
 }

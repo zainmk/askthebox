@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
 
+
 import { MediaContext } from '../helpers/MediaContext';
 
 import Typography from '@mui/material/Typography';
@@ -13,21 +14,19 @@ import LibraryTools from './LibraryTools';
 
 function MediaCard({ media }){
 
-    const { setMediaList } = useContext(MediaContext) // TODO: Move this to parent, and use setMedia
+    const { setMediaList } = useContext(MediaContext) 
 
     const [image, setImage] = useState()
     const [status, setStatus] = useState(media.status)
 
     // TODO: Consider fixing this hook so it has necessary dependencies but does not rerender too often.
     useEffect(() => {
-
         setMediaList(mediaList => {
             let newMediaList = [ ...mediaList ]
             const index = mediaList.findIndex( x => x.imdbID === media.imdbID);
             newMediaList[index]['status'] = status
             return newMediaList
         })
-
     }, [status, setMediaList, media.imdbID])
 
     useEffect(() => {
@@ -38,7 +37,6 @@ function MediaCard({ media }){
                 .then(res => setImage(res))
         }
     }, [media])
-    
 
     return ( 
         <Box sx={{ display: "flex", gap:"20px" }}>

@@ -6,14 +6,13 @@ import CardList from '../components/CardList.js';
 import Box from '@mui/material/Box';
 
 import { MediaContext } from '../helpers/MediaContext';
-
 import { getMediaList, updateMediaList } from '../helpers/database.js'
 
 function MainPage() {
 
   const { mediaList, setMediaList } = useContext(MediaContext);
   const [ isLoading, setIsLoading ] = useState(false)
-
+ 
   useEffect(()=> {
     setIsLoading(true)
     getMediaList().then(res => {

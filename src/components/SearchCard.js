@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
 
 import { MediaContext } from '../helpers/MediaContext';
+import { AdminContext } from '../helpers/AdminContext';
 
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
@@ -59,11 +60,13 @@ function SearchCard(){
     const DEBOUNCE_DELAY = 300; // ms
 
     const { setMediaList } = useContext(MediaContext);
+    const { setAdmin } = useContext(AdminContext);
 
     const [searchText, setSearchText] = useState('');
     const [searchData, setSearchData] = useState([]);
 
     const onAddSearchEntry = (entry) => {
+        entry.status = 'watch' // DEFAULT TO 'WATCH' STATUS
         setMediaList((mediaList) => mediaList?.filter(media => media.imdbID === entry.imdbID).length > 0 ? mediaList : [entry, ...mediaList])
         setSearchData([]) 
     }
@@ -77,7 +80,7 @@ function SearchCard(){
                         const res_byID = await fetch(`https://www.omdbapi.com/?apikey=ee46ee2e&i=${searchText}`)
                         const data = await res.json();
                         const data_byID = await res_byID?.json().catch(() => []);
-                        const results = data.Response !== 'False' ? data.Search : data_byID;
+                        const results = data.Response !== 'False' ? data.Search : [data_byID];
                         setSearchData(results);
                     } catch (err) {
                         console.log(err);
@@ -93,6 +96,13 @@ function SearchCard(){
 
     }, [searchText]);
 
+    
+    useEffect(() => {
+        if(searchText == process.env.REACT_APP_ADMIN_KEY){
+            setAdmin(true)
+        }
+    }, [searchText]);
+
 
     return (
         <>
@@ -104,7 +114,7 @@ function SearchCard(){
                 <StyledInputBase
                     value={searchText}
                     onChange={(event) => setSearchText(event.target.value)}
-                    placeholder="Search..."
+                    placeholder="title or imdbID (ex. 'tt1375666') ...  "
                 />  
             </Search>
             {searchData.length > 0 && <Table >
