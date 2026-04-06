@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
+import Link from '@mui/material/Link';
 
 import LibraryTools from './LibraryTools';
 
@@ -49,9 +50,13 @@ function MediaCard({ media }){
                 <Typography sx={{ fontSize: 14 }} color="text.secondary">
                     {media.Type}
                 </Typography>
-                <Typography variant="h5" component="div">
-                    {media.Title} | ({media.Year})
-                </Typography>
+
+                <Link href={`https://www.imdb.com/title/${media.imdbID}/`} target="_blank" rel="noopener noreferrer" underline="hover" color='inherit'>
+                    <Typography variant="h5" component="div">
+                        {media.Title} | ({media.Year})
+                    </Typography>
+                </Link>
+
                 <Divider/>
                 <Box sx={{ marginTop: "10px" }}>
                     <LibraryTools status={status} setStatus={setStatus} />
