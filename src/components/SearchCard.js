@@ -98,7 +98,7 @@ function SearchCard(){
 
     
     useEffect(() => {
-        if(searchText == process.env.REACT_APP_ADMIN_KEY){
+        if(searchText === process.env.REACT_APP_ADMIN_KEY){
             setAdmin(true)
         }
     }, [searchText]);
