@@ -1,29 +1,24 @@
-# [thumbs](https://thumbs.vercel.app/) ![thumbs_image](./public/thumbs.png)
+# [asktheBox](https://askthebox.vercel.app/)
 
 ## purpose
+A web app to allow users to make requests for movies/series via IMDB's (OMDB) API, to add to the BOX. Movies are hosted via plex media server. 
 
 ## stack
+FE: ReactJS
+BE: FastAPI
+DB: Firebse Realtime Database
+CI/D: Vercel
 
+## setup 
+navigate to url and add movies - only admin can tag as 'added' and attach plex link
 
-
-
-## to develop
-The application uses [ReactJS](https://react.dev/) to render, therefore you will need Node/NPM installed. We use the [MaterialsUI](https://mui.com/material-ui/) for components and styling.
-
-Begin by installing the necessary dependencies...
-
-     npm install
-
-Then use the following command to run (w/ react-scripts)...
-
-     npm start
-
-You will need several keys saved in the appropriate '.env' file. Contact repo owner for these keys.
-
-
-This app is currently in development, can expect instability and drastic changes in the meantime.
-
-### IMDB API
+##### IMDB API
 https://www.omdbapi.com/
+
+### ex.
+
+https://github.com/user-attachments/assets/2fb13f27-2894-4129-a3a2-597bd6ae71f1
+
+
     
 **Last updated 8/14/2024**
