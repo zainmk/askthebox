@@ -1,7 +1,6 @@
 import '../App.js';
 import React, { useState, useEffect, useContext } from "react";
 
-import TitleBar from '../components/TitleBar.js';
 import CardList from '../components/CardList.js';
 import Box from '@mui/material/Box';
 
