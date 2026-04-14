@@ -28,7 +28,7 @@ function MediaCard({ media }){
             newMediaList[index]['status'] = status
             return newMediaList
         })
-    }, [status, setMediaList, media.imdbID])
+    }, [setMediaList, media.imdbID])
 
     useEffect(() => {
         if(media.Poster && media.Poster !== 'N/A'){
@@ -87,9 +87,9 @@ function MediaCard({ media }){
                     )}
                  </Box>
                 <Divider/>
-                <Box sx={{ marginTop: "10px" }}>
+                {/* <Box sx={{ marginTop: "10px" }}>
                     <LibraryTools status={status} setStatus={setStatus} />
-                </Box>
+                </Box> */}
             </Box>
         </Box>
     )
