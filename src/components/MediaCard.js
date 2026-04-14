@@ -9,26 +9,12 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
 
-import LibraryTools from './LibraryTools';
-
-
 function MediaCard({ media }){
 
     const { setMediaList } = useContext(MediaContext) 
     const { admin } = useContext(AdminContext) 
 
     const [image, setImage] = useState()
-    const [status, setStatus] = useState(media.status)
-
-    // TODO: Consider fixing this hook so it has necessary dependencies but does not rerender too often.
-    useEffect(() => {
-        setMediaList(mediaList => {
-            let newMediaList = [ ...mediaList ]
-            const index = mediaList.findIndex( x => x.imdbID === media.imdbID);
-            newMediaList[index]['status'] = status
-            return newMediaList
-        })
-    }, [setMediaList, media.imdbID])
 
     useEffect(() => {
         if(media.Poster && media.Poster !== 'N/A'){
@@ -87,9 +73,6 @@ function MediaCard({ media }){
                     )}
                  </Box>
                 <Divider/>
-                {/* <Box sx={{ marginTop: "10px" }}>
-                    <LibraryTools status={status} setStatus={setStatus} />
-                </Box> */}
             </Box>
         </Box>
     )
