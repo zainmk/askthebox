@@ -1,9 +1,20 @@
-// TODO: Move these methods to the backend API
+import { initializeApp } from 'firebase/app'
+import { getDatabase, ref, get, set } from 'firebase/database'
 
-const AUTH_FIREBASE_USERS = async(path = '') => {
-    const authToken = await fetch(process.env.REACT_APP_AUTH_URL).then(res => res.json())
-    return `https://thumbsapp-748bd-default-rtdb.firebaseio.com/${path}.json?access_token=${authToken}`
+const firebaseConfig = {
+    projectId: 'thumbsapp-748bd',
+    databaseURL: 'https://thumbsapp-748bd-default-rtdb.firebaseio.com',
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
 }
 
-export const getMediaList = async() => fetch(await AUTH_FIREBASE_USERS(`requests`)).then(res => res.json())
-export const updateMediaList = async(newMediaList) => fetch(await AUTH_FIREBASE_USERS(`requests`), { method: 'PUT', body: JSON.stringify(newMediaList)})
+const app = initializeApp(firebaseConfig)
+const db = getDatabase(app)
+
+export const getMediaList = async () => {
+    const snapshot = await get(ref(db, 'requests'))
+    return snapshot.val()
+}
+
+export const updateMediaList = async (newMediaList) => {
+    await set(ref(db, 'requests'), newMediaList)
+}

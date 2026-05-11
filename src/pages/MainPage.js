@@ -1,5 +1,5 @@
 import '../App.js';
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 
 import CardList from '../components/CardList.js';
 import Box from '@mui/material/Box';
@@ -11,17 +11,19 @@ function MainPage() {
 
   const { mediaList, setMediaList } = useContext(MediaContext);
   const [ isLoading, setIsLoading ] = useState(false)
- 
+  const hasLoaded = useRef(false)
+
   useEffect(()=> {
     setIsLoading(true)
     getMediaList().then(res => {
       setMediaList(res ? res : [])
       setIsLoading(false)
+      hasLoaded.current = true
     })
   }, [setMediaList])
 
   useEffect(()=> {
-    updateMediaList(mediaList)
+    if (hasLoaded.current) updateMediaList(mediaList)
   }, [mediaList])
 
 
