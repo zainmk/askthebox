@@ -1,11 +1,7 @@
 import { initializeApp } from 'firebase/app'
 import { getDatabase, ref, get, set } from 'firebase/database'
 
-const firebaseConfig = {
-    projectId: 'thumbsapp-748bd',
-    databaseURL: 'https://thumbsapp-748bd-default-rtdb.firebaseio.com',
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-}
+const firebaseConfig = { projectId: 'thumbsapp-748bd' } // TODO: tighten access
 
 const app = initializeApp(firebaseConfig)
 const db = getDatabase(app)
