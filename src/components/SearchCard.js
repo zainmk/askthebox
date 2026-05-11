@@ -54,6 +54,21 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 
+// styling for search bar above
+
+
+
+const TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+const TMDB_BASE = 'https://api.themoviedb.org/3';
+const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
+
+const normalizeTmdbResult = (item) => ({
+    Title: item.title || item.name || '',
+    Year: (item.release_date || item.first_air_date || '').substring(0, 4),
+    Type: item.media_type === 'movie' ? 'movie' : 'series',
+    Poster: item.poster_path ? `${TMDB_IMAGE_BASE}${item.poster_path}` : 'N/A',
+    tmdbID: item.id,
+});
 
 function SearchCard(){
 
@@ -65,22 +80,48 @@ function SearchCard(){
     const [searchText, setSearchText] = useState('');
     const [searchData, setSearchData] = useState([]);
 
-    const onAddSearchEntry = (entry) => {
-        entry.status = 'watch' // DEFAULT TO 'WATCH' STATUS
-        setMediaList((mediaList) => mediaList?.filter(media => media.imdbID === entry.imdbID).length > 0 ? mediaList : [entry, ...mediaList])
-        setSearchData([]) 
-    }
+    const onAddSearchEntry = async (rawEntry) => {
+        const mediaType = rawEntry.Type === 'movie' ? 'movie' : 'tv';
+        let imdbID = '';
+        try {
+            const res = await fetch(`${TMDB_BASE}/${mediaType}/${rawEntry.tmdbID}?api_key=${TMDB_API_KEY}&append_to_response=external_ids`);
+            const details = await res.json();
+            imdbID = details.imdb_id || details.external_ids?.imdb_id || '';
+        } catch (err) {
+            console.log(err);
+        }
+        const entry = { ...rawEntry, imdbID, status: 'watch' };
+        setMediaList((mediaList) =>
+            mediaList?.some(m => (entry.imdbID && m.imdbID === entry.imdbID) || (entry.tmdbID && m.tmdbID === entry.tmdbID))
+                ? mediaList
+                : [entry, ...mediaList]
+        );
+        setSearchData([]);
+    };
 
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
             const fetchMovies = async () => {
                 if (searchText.length > 1) {
                     try {
-                        const res = await fetch(`https://www.omdbapi.com/?apikey=ee46ee2e&s=${searchText}`); // 522792c1 (another token)
-                        const res_byID = await fetch(`https://www.omdbapi.com/?apikey=ee46ee2e&i=${searchText}`)
-                        const data = await res.json();
-                        const data_byID = await res_byID?.json().catch(() => []);
-                        const results = data.Response !== 'False' ? data.Search : [data_byID];
+                        const isImdbId = /^tt\d+$/.test(searchText.trim());
+                        let results = [];
+
+                        if (isImdbId) {
+                            const res = await fetch(`${TMDB_BASE}/find/${encodeURIComponent(searchText.trim())}?api_key=${TMDB_API_KEY}&external_source=imdb_id`);
+                            const data = await res.json();
+                            const combined = [
+                                ...(data.movie_results || []).map(r => ({ ...r, media_type: 'movie' })),
+                                ...(data.tv_results || []).map(r => ({ ...r, media_type: 'tv' })),
+                            ];
+                            results = combined.map(normalizeTmdbResult);
+                        } else {
+                            const res = await fetch(`${TMDB_BASE}/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(searchText)}`);
+                            const data = await res.json();
+                            results = (data.results || [])
+                                .filter(r => r.media_type === 'movie' || r.media_type === 'tv')
+                                .map(normalizeTmdbResult);
+                        }
                         setSearchData(results);
                     } catch (err) {
                         console.log(err);
@@ -114,7 +155,7 @@ function SearchCard(){
                 <StyledInputBase
                     value={searchText}
                     onChange={(event) => setSearchText(event.target.value)}
-                    placeholder="title or imdbID (ex. 'tt1375666') ...  "
+                    placeholder="title or IMDb ID (ex. 'tt1375666') ..."
                 />  
             </Search>
             {searchData.length > 0 && <Table >

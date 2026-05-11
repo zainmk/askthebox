@@ -80,9 +80,16 @@ function MediaCard({ media }){
                 </Paper>
             </Box>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary">
-                    {media.Type}
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary">
+                        {media.Type}
+                    </Typography>
+                    {media.Type === 'series' && (
+                        <IconButton size="small" onClick={handleOpenPreview} disabled={loading} title="Export release dates to calendar" sx={{ padding: 0 }}>
+                            {loading ? <CircularProgress size={18} /> : <CalendarMonthIcon fontSize="small" />}
+                        </IconButton>
+                    )}
+                </Box>
                  <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
                     {admin ? (
                         <Typography
@@ -107,11 +114,6 @@ function MediaCard({ media }){
                     )}
                  </Box>
                 <Divider/>
-                {media.Type === 'series' && (
-                    <IconButton size="small" onClick={handleOpenPreview} disabled={loading} title="Export release dates to calendar" sx={{ alignSelf: "flex-start", padding: 0 }}>
-                        {loading ? <CircularProgress size={18} /> : <CalendarMonthIcon fontSize="small" />}
-                    </IconButton>
-                )}
 
                 <Dialog open={!!preview} onClose={() => setPreview(null)} maxWidth="sm" fullWidth>
                     <DialogTitle>{media.Title} — Calendar Preview</DialogTitle>

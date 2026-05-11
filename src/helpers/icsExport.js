@@ -1,4 +1,5 @@
-const OMDB_API_KEY = 'ee46ee2e';
+const TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+const TMDB_BASE = 'https://api.themoviedb.org/3';
 
 function formatDateToICS(dateStr) {
     const date = new Date(dateStr);
@@ -58,22 +59,40 @@ function downloadFile(content, filename) {
     URL.revokeObjectURL(url);
 }
 
-async function fetchMovieDetails(imdbID) {
-    const res = await fetch(`https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbID}`);
+async function resolveTmdbId(media) {
+    if (media.tmdbID) {
+        return { tmdbID: media.tmdbID, mediaType: media.Type === 'movie' ? 'movie' : 'tv' };
+    }
+    // Fall back to finding by IMDb ID for older entries
+    const res = await fetch(`${TMDB_BASE}/find/${media.imdbID}?api_key=${TMDB_API_KEY}&external_source=imdb_id`);
+    const data = await res.json();
+    if (data.movie_results?.length > 0) return { tmdbID: data.movie_results[0].id, mediaType: 'movie' };
+    if (data.tv_results?.length > 0) return { tmdbID: data.tv_results[0].id, mediaType: 'tv' };
+    throw new Error('Could not find this title on TMDB.');
+}
+
+async function fetchMovieDetails(tmdbID) {
+    const res = await fetch(`${TMDB_BASE}/movie/${tmdbID}?api_key=${TMDB_API_KEY}`);
     return res.json();
 }
 
-async function fetchSeasonEpisodes(imdbID, season) {
-    const res = await fetch(`https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbID}&Season=${season}`);
+async function fetchTVDetails(tmdbID) {
+    const res = await fetch(`${TMDB_BASE}/tv/${tmdbID}?api_key=${TMDB_API_KEY}`);
+    return res.json();
+}
+
+async function fetchSeasonEpisodes(tmdbID, season) {
+    const res = await fetch(`${TMDB_BASE}/tv/${tmdbID}/season/${season}?api_key=${TMDB_API_KEY}`);
     return res.json();
 }
 
 export async function fetchICSEvents(media) {
-    const details = await fetchMovieDetails(media.imdbID);
+    const { tmdbID, mediaType } = await resolveTmdbId(media);
 
-    if (media.Type === 'movie') {
-        const released = details.Released;
-        if (!released || released === 'N/A') {
+    if (mediaType === 'movie') {
+        const details = await fetchMovieDetails(tmdbID);
+        const released = details.release_date;
+        if (!released) {
             throw new Error('No release date available for this movie.');
         }
         const icsDate = formatDateToICS(released);
@@ -86,20 +105,21 @@ export async function fetchICSEvents(media) {
         };
     }
 
-    if (media.Type === 'series') {
-        const totalSeasons = parseInt(details.totalSeasons) || 1;
+    if (mediaType === 'tv') {
+        const details = await fetchTVDetails(tmdbID);
+        const totalSeasons = details.number_of_seasons || 1;
         const events = [];
 
         for (let s = 1; s <= totalSeasons; s++) {
-            const seasonData = await fetchSeasonEpisodes(media.imdbID, s);
-            if (seasonData.Response === 'False' || !seasonData.Episodes) continue;
-            for (const ep of seasonData.Episodes) {
-                const icsDate = formatDateToICS(ep.Released);
+            const seasonData = await fetchSeasonEpisodes(tmdbID, s);
+            if (!seasonData.episodes) continue;
+            for (const ep of seasonData.episodes) {
+                const icsDate = formatDateToICS(ep.air_date);
                 if (!icsDate) continue;
                 events.push({
                     date: icsDate,
                     displayDate: formatDateDisplay(icsDate),
-                    summary: `${media.Title} - S${String(s).padStart(2, '0')}E${String(ep.Episode).padStart(2, '0')}: ${ep.Title}`,
+                    summary: `${media.Title} - S${String(s).padStart(2, '0')}E${String(ep.episode_number).padStart(2, '0')}: ${ep.name}`,
                 });
             }
         }
