@@ -22,7 +22,6 @@ import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import CloseIcon from '@mui/icons-material/Close';
 
 function MediaCard({ media }){
 
@@ -116,25 +115,14 @@ function MediaCard({ media }){
                 <Divider/>
 
                 <Dialog open={!!preview} onClose={() => setPreview(null)} maxWidth="sm" fullWidth>
-                    <DialogTitle>{media.Title} — Calendar Preview</DialogTitle>
+                    <DialogTitle>{media.Title}</DialogTitle>
                     <DialogContent dividers sx={{ padding: 0 }}>
                         <Table size="small">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Event</TableCell>
-                                    <TableCell align="right">Date</TableCell>
-                                </TableRow>
-                            </TableHead>
                             <TableBody>
                                 {preview?.events.map((event, i) => (
                                     <TableRow key={i}>
                                         <TableCell>{event.summary}</TableCell>
                                         <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>{event.displayDate}</TableCell>
-                                        <TableCell padding="checkbox">
-                                            <IconButton size="small" onClick={() => setPreview(p => ({ ...p, events: p.events.filter((_, j) => j !== i) }))}>
-                                                <CloseIcon fontSize="small" />
-                                            </IconButton>
-                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
